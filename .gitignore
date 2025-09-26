@@ -10,3 +10,4 @@ Thumbs.db
 __pycache__
 **/.ipynb_checkpoints/
 .env
+/news-datasets
