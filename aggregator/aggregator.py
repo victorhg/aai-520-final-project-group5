@@ -1,1 +1,3 @@
-"""Placeholder for aggregator: merges all inputs into one dataset."""
+class Aggregator:
+    def execute(self) -> str:
+        return "Sample data from aggregator"
