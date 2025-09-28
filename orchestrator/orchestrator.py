@@ -56,5 +56,4 @@ def run_investment_analysis(symbol: str, instructions: str):
 
 if __name__ == "__main__":
     # run with python3 -m orchestrator.orchestrator
-    orchestrator = Orchestrator()
-    orchestrator.run_investment_analysis("AAPL", "Analyze the potential for AAPL stock for the past 10 days and recommend buy/sell/hold.")
+    run_investment_analysis("AAPL", "Analyze the potential for AAPL stock for the past 10 days and recommend buy/sell/hold.")
