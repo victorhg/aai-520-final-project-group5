@@ -1,3 +1,8 @@
 feedparser
 yfinance
 bs4
+transformers
+torch
+pandas
+numpy
+huggingface_hub
