@@ -18,6 +18,8 @@ class Orchestrator:
         # TODO: We need to know from the instructors in this should be agentic, or if it can be programmatic
         # I imagine we need an OutputAgent here as well to polish the final output
         # If agentic, these would have to be @tools
+
+        # example
         print(self.workers["ingestion"].execute())
         print(self.workers["aggregation"].execute())
         return None
