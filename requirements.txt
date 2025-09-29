@@ -1,6 +1,10 @@
 feedparser
-yfinance
 bs4
+transformers
+torch
+pandas
+numpy
+huggingface_hub
 pydantic>=2.5
 yfinance==0.2.66
 langchain==0.3.27
