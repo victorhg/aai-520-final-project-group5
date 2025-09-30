@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 import json
-from aggregator.aggregator import Aggregator
-from ingestion.ingestion import Ingestion
+from src.aggregator.aggregator import Aggregator
+from src.ingestion.ingestion import Ingestion
 from langchain_core.tools import tool
 from langchain_core.runnables import RunnableParallel, RunnableLambda
 

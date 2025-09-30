@@ -1,4 +1,4 @@
-from worker.base_worker import BaseWorker
+from src.worker.base_worker import BaseWorker
 
 class Ingestion(BaseWorker):
     def execute(self, *inputs) -> str:

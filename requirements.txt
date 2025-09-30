@@ -11,3 +11,4 @@ langchain==0.3.27
 langchain-community==0.3.30
 langgraph==0.6.7
 ipython==9.5.0
+yfinance==0.2.66
