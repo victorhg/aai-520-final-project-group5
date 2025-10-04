@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 
-# Simple in-memory store for this example.
+# Simple in-memory store for this example. For persistence, use a file or DB.
 _memory_store: List[Dict[str, Any]] = []
 MEMORY_FILE = "./data/agent_memory.json"
 
