@@ -1,0 +1,74 @@
+[
+  {
+    "timestamp": "2025-10-04T19:20:42.431061",
+    "text": "AAPL Q4 earnings beat expectations",
+    "tags": [
+      "AAPL",
+      "earnings"
+    ]
+  },
+  {
+    "timestamp": "2025-10-04T19:20:42.431664",
+    "text": "MSFT announced a new AI partnership",
+    "tags": [
+      "MSFT",
+      "AI"
+    ]
+  },
+  {
+    "timestamp": "2025-10-04T19:20:42.431844",
+    "text": "TSLA stock is volatile due to production concerns",
+    "tags": [
+      "TSLA",
+      "production"
+    ]
+  },
+  {
+    "timestamp": "2025-10-04T19:25:28.486744",
+    "text": "AAPL Q4 earnings beat expectations",
+    "tags": [
+      "AAPL",
+      "earnings"
+    ]
+  },
+  {
+    "timestamp": "2025-10-04T19:25:28.487872",
+    "text": "MSFT announced a new AI partnership",
+    "tags": [
+      "MSFT",
+      "AI"
+    ]
+  },
+  {
+    "timestamp": "2025-10-04T19:25:28.488276",
+    "text": "TSLA stock is volatile due to production concerns",
+    "tags": [
+      "TSLA",
+      "production"
+    ]
+  },
+  {
+    "timestamp": "2025-10-04T19:52:22.822551",
+    "text": "AAPL Q2 earnings beat expectations",
+    "tags": [
+      "AAPL",
+      "earnings"
+    ]
+  },
+  {
+    "timestamp": "2025-10-04T19:52:22.823170",
+    "text": "AAPL announced a new AI partnership with NASA",
+    "tags": [
+      "AAPL",
+      "AI"
+    ]
+  },
+  {
+    "timestamp": "2025-10-04T19:52:22.823556",
+    "text": "TSLA stock is volatile due to production concerns",
+    "tags": [
+      "TSLA",
+      "production"
+    ]
+  }
+]
