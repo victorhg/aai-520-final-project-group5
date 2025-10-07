@@ -1,6 +1,5 @@
 from datetime import datetime, timezone
 import json
-from src.aggregator.aggregator import Aggregator
 from src.ingestion.ingestion import Ingestion
 from langchain_core.tools import tool
 from langchain_core.runnables import RunnableParallel, RunnableLambda
@@ -9,8 +8,7 @@ from langchain_core.runnables import RunnableParallel, RunnableLambda
 class Orchestrator:
     def __init__(self):
         self.workers = {
-            "ingestion": Ingestion(),  # Parallel ingestion of all data sources
-            "aggregation": Aggregator(),  # Data aggregation and normalization
+            "ingestion": Ingestion(),  # Parallel ingestion of financial and news data
         }
 
     def execute(self, symbol: str, instructions: str):
@@ -19,9 +17,9 @@ class Orchestrator:
         # I imagine we need an OutputAgent here as well to polish the final output
         # If agentic, these would have to be @tools
 
-        # example
-        print(self.workers["ingestion"].execute())
-        print(self.workers["aggregation"].execute())
+        # example - ingestion now returns structured data ready for processing
+        ingestion_result = self.workers["ingestion"].execute(symbol)
+        print(ingestion_result)
         return None
 
 def run_investment_analysis(symbol: str, instructions: str):

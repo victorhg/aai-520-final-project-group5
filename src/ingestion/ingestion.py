@@ -1,13 +1,11 @@
 """
 Main Ingestion Coordinator
-Orchestrates parallel data fetching from all ingestion sources (NLP-5 through NLP-8)
+Orchestrates parallel data fetching from financial and news sources (simplified)
 """
 
 from src.worker.base_worker import BaseWorker
 from src.ingestion.financial_data import FinancialDataIngestion
 from src.ingestion.news_data import NewsDataIngestion
-from src.ingestion.memory_data import MemoryDataIngestion
-from src.ingestion.additional_data import AdditionalDataIngestion
 from typing import Dict, Any
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -15,22 +13,20 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 class Ingestion(BaseWorker):
     """
-    Main Ingestion Coordinator that fetches data from all sources in parallel.
+    Main Ingestion Coordinator that fetches data from financial and news sources in parallel.
     
     Responsibilities:
-    - Coordinate parallel data fetching from all sources
-    - Combine results from all ingestors into single bundle
+    - Coordinate parallel data fetching from financial and news sources
+    - Combine results into single bundle
     - Handle partial failures gracefully
     - Track errors from each source
-    - Return complete raw data bundle
+    - Return complete data bundle
     """
     
     def __init__(self):
-        """Initialize all data ingestors."""
+        """Initialize data ingestors."""
         self.financial_ingestor = FinancialDataIngestion()
         self.news_ingestor = NewsDataIngestion()
-        self.memory_ingestor = MemoryDataIngestion()
-        self.additional_ingestor = AdditionalDataIngestion()
     
     def execute(self, *inputs) -> Dict[str, Any]:
         """
@@ -38,100 +34,134 @@ class Ingestion(BaseWorker):
         
         Args:
             inputs[0] (str): Stock ticker symbol (e.g., "AAPL")
-            inputs[1] (str, optional): Time period for historical data (default: "10d")
+            inputs[1] (str, optional): Time period for historical data (default: "1mo")
             inputs[2] (int, optional): Number of news articles (default: 10)
-            inputs[3] (bool, optional): Include memory data (default: True)
-            inputs[4] (bool, optional): Include additional data (default: True)
         
         Returns:
-            dict: Complete raw data bundle with data from all sources
+            dict: Complete data bundle with financial and news data
         """
-        # TODO: Implement parallel ingestion coordinator
-        # 1. Extract and validate parameters
-        # 2. Create tasks for each ingestor (financial, news, memory, additional)
-        # 3. Execute all tasks in parallel using ThreadPoolExecutor
-        # 4. Collect results as they complete
-        # 5. Handle errors from individual sources (don't fail entire ingestion)
-        # 6. Combine all results into single bundle
-        # 7. Add metadata (timestamp, status, errors list)
-        # 8. Return complete raw data bundle
-        
-        symbol = inputs[0] if len(inputs) > 0 else "AAPL"
-        
-        return {
-            "symbol": symbol,
-            "timestamp": datetime.now().isoformat(),
+        try:
+            # Extract parameters
+            symbol = inputs[0] if len(inputs) > 0 else "AAPL"
+            period = inputs[1] if len(inputs) > 1 else "1mo"
+            news_limit = inputs[2] if len(inputs) > 2 else 10
             
-            # NLP-5: Financial Data
-            "financial_data": None,  # TODO: Result from FinancialDataIngestion
+            # Execute parallel fetching
+            results = self._execute_parallel(symbol, period, news_limit)
             
-            # NLP-6: News Data
-            "news_data": None,  # TODO: Result from NewsDataIngestion
+            # Combine results
+            bundle = self._combine_results(symbol, results)
             
-            # NLP-7: Memory Data
-            "memory_data": None,  # TODO: Result from MemoryDataIngestion
+            return bundle
             
-            # NLP-8: Additional Data
-            "additional_data": None,  # TODO: Result from AdditionalDataIngestion
-            
-            # Error tracking
-            "errors": [],  # TODO: List of errors from any source
-            
-            # Overall status
-            "status": "not_implemented"  # TODO: "success", "partial_success", or "failed"
-        }
+        except Exception as e:
+            return {
+                "symbol": inputs[0] if len(inputs) > 0 else "UNKNOWN",
+                "timestamp": datetime.now().isoformat(),
+                "financial_data": None,
+                "news_data": None,
+                "errors": [{"source": "ingestion_coordinator", "error": str(e)}],
+                "status": "error"
+            }
     
-    def _execute_parallel(self, symbol: str, period: str, news_limit: int,
-                         include_memory: bool, include_additional: bool) -> Dict[str, Any]:
+    def _execute_parallel(self, symbol: str, period: str, news_limit: int) -> Dict[str, Any]:
         """
-        TODO: Execute all ingestion tasks in parallel.
+        Execute all ingestion tasks in parallel.
         
         Args:
             symbol: Stock ticker symbol
             period: Time period for historical data
             news_limit: Number of news articles
-            include_memory: Whether to fetch memory data
-            include_additional: Whether to fetch additional data
             
         Returns:
             Dictionary with results from all sources
         """
-        # TODO: Implement parallel execution
-        # Use ThreadPoolExecutor with max_workers=4
-        # Submit tasks for each ingestor
-        # Use as_completed to collect results
-        # Handle exceptions for each task
-        pass
+        results = {
+            "financial": None,
+            "news": None
+        }
+        
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            # Submit tasks
+            future_to_source = {
+                executor.submit(self.financial_ingestor.execute, symbol, period): "financial",
+                executor.submit(self.news_ingestor.execute, symbol, news_limit): "news"
+            }
+            
+            # Collect results as they complete
+            for future in as_completed(future_to_source):
+                source = future_to_source[future]
+                try:
+                    result = future.result()
+                    results[source] = result
+                except Exception as e:
+                    results[source] = {
+                        "source": source,
+                        "data": None,
+                        "status": "error",
+                        "error": str(e),
+                        "timestamp": datetime.now().isoformat()
+                    }
+        
+        return results
     
-    def _combine_results(self, results: Dict[str, Any]) -> Dict[str, Any]:
+    def _combine_results(self, symbol: str, results: Dict[str, Any]) -> Dict[str, Any]:
         """
-        TODO: Combine results from all ingestors into single bundle.
+        Combine results from all ingestors into single bundle.
         
         Args:
+            symbol: Stock ticker symbol
             results: Dictionary with results from each ingestor
             
         Returns:
-            Combined raw data bundle
+            Combined data bundle
         """
-        # TODO: Implement result combination
-        # Extract data from each ingestor result
-        # Collect all errors
+        errors = []
+        
+        # Extract financial data
+        financial_result = results.get("financial", {})
+        financial_data = financial_result.get("data") if financial_result.get("status") == "success" else None
+        if financial_result.get("error"):
+            errors.append({"source": "financial", "error": financial_result.get("error")})
+        
+        # Extract news data
+        news_result = results.get("news", {})
+        news_data = news_result.get("data") if news_result.get("status") in ["success", "partial_success"] else None
+        if news_result.get("error"):
+            errors.append({"source": "news", "error": news_result.get("error")})
+        
         # Determine overall status
-        # Create final bundle structure
-        pass
+        status = self._determine_status(results)
+        
+        return {
+            "symbol": symbol,
+            "timestamp": datetime.now().isoformat(),
+            "financial_data": financial_data,
+            "news_data": news_data,
+            "errors": errors,
+            "status": status
+        }
     
     def _determine_status(self, results: Dict[str, Any]) -> str:
         """
-        TODO: Determine overall ingestion status based on results.
+        Determine overall ingestion status based on results.
         
         Args:
             results: Dictionary with results from each ingestor
             
         Returns:
-            Status string: "success", "partial_success", or "failed"
+            Status string: "success", "partial_success", or "error"
         """
-        # TODO: Implement status determination logic
-        # - "success": All sources succeeded
-        # - "partial_success": Some sources succeeded
-        # - "failed": All sources failed
-        pass
+        success_count = 0
+        total_count = len(results)
+        
+        for source, result in results.items():
+            if result and result.get("status") in ["success", "partial_success"]:
+                success_count += 1
+        
+        if success_count == total_count:
+            return "success"
+        elif success_count > 0:
+            return "partial_success"
+        else:
+            return "error"
