@@ -28,8 +28,6 @@ src/ingestion/
 ├── ingestion.py              # Main coordinator (NLP-5 to NLP-8)
 ├── financial_data.py         # NLP-5: Stock data from Yahoo Finance
 ├── news_data.py              # NLP-6: News from NewsAPI & Kaggle
-├── memory_data.py            # NLP-7: Fetch from Memory Agent
-├── additional_data.py        # NLP-8: Macro indicators, filings, Senate trading
 └── ingestion-flow.md         # This documentation
 ```
 
@@ -37,33 +35,19 @@ src/ingestion/
 
 ## Data Sources by Task
 
-### NLP-5: Stock Data Ingestion (`financial_data.py`)
+### NLP-1: Stock Data Ingestion (`financial_data.py`)
 **Data Source**: Yahoo Finance (yfinance)
 - Historical stock prices (OHLCV)
 - Company information
 - Stock fundamentals
 - Real-time quotes
 
-### NLP-6: News Ingestion (`news_data.py`)
+### NLP-2: News Ingestion (`news_data.py`)
 **Data Sources**: NewsAPI, Kaggle datasets, Yahoo Finance RSS
 - Recent news articles
 - Press releases
 - Financial news
 - Market sentiment articles
-
-### NLP-7: Memory Ingestion (`memory_data.py`)
-**Data Source**: Memory Agent (internal)
-- Past analysis notes
-- Historical recommendations
-- Learned patterns
-- Previous insights
-
-### NLP-8: Additional Data Ingestion (`additional_data.py`)
-**Data Sources**: Multiple specialized APIs
-- **Macro Indicators**: Economic data (GDP, inflation, interest rates)
-- **SEC Filings**: 10-K, 10-Q, 8-K reports
-- **Senate Trading**: Congressional stock trading data
-- **Market indices**: S&P 500, NASDAQ performance
 
 ---
 
@@ -78,18 +62,13 @@ graph TB
     
     C --> D[FinancialDataIngestion<br/>NLP-5]
     C --> E[NewsDataIngestion<br/>NLP-6]
-    C --> F[MemoryDataIngestion<br/>NLP-7]
-    C --> G[AdditionalDataIngestion<br/>NLP-8]
     
     D --> H[Raw Stock Data]
     E --> I[Raw News Articles]
-    F --> J[Past Notes]
-    G --> K[Macro/Filings/Senate Data]
     
     H --> L[Combine All Raw Data]
     I --> L
-    J --> L
-    K --> L
+
     
     L --> M[Return Complete<br/>Data Bundle]
     M --> N[Processing Module<br/>Sentiment/Classification]
@@ -119,32 +98,15 @@ graph LR
         B4 --> B5
     end
     
-    subgraph "NLP-7: Memory Data"
-        C1[MemoryDataIngestion] --> C2[Memory Agent]
-        C2 --> C3[Past Analysis Notes]
-    end
-    
-    subgraph "NLP-8: Additional Data"
-        D1[AdditionalDataIngestion] --> D2[Macro API]
-        D1 --> D3[SEC Edgar]
-        D1 --> D4[Senate Trading DB]
-        D2 --> D5[Combined Additional Data]
-        D3 --> D5
-        D4 --> D5
-    end
     
     A3 --> E[Ingestion Coordinator]
     A4 --> E
     B5 --> E
-    C3 --> E
-    D5 --> E
     
     E --> F[Complete Raw Data Bundle]
     
     style A1 fill:#4CAF50,color:#fff
     style B1 fill:#2196F3,color:#fff
-    style C1 fill:#FF9800,color:#fff
-    style D1 fill:#9C27B0,color:#fff
     style E fill:#F44336,color:#fff
 ```
 
@@ -198,14 +160,14 @@ sequenceDiagram
     "symbol": "AAPL",
     "timestamp": "2025-10-03T12:00:00Z",
     
-    # NLP-5: Financial Data (Raw)
+    # NLP-1: Financial Data (Raw)
     "financial_data": {
         "historical": DataFrame,     # Raw OHLCV data
         "info": dict,               # Raw company info from yfinance
         "fundamentals": dict        # Raw fundamental metrics
     },
     
-    # NLP-6: News Data (Raw)
+    # NLP-2: News Data (Raw)
     "news_data": [
         {
             "title": "Apple announces...",
@@ -215,53 +177,6 @@ sequenceDiagram
             "url": "https://..."
         },
         # ... more articles
-    ],
-    
-    # NLP-7: Memory Data (Raw)
-    "memory_data": {
-        "past_analyses": [
-            {
-                "date": "2025-09-25",
-                "recommendation": "buy",
-                "confidence": 0.85,
-                "notes": "Strong earnings growth..."
-            }
-        ],
-        "learned_patterns": [...]
-    },
-    
-    # NLP-8: Additional Data (Raw)
-    "additional_data": {
-        "macro_indicators": {
-            "gdp_growth": 2.5,
-            "inflation_rate": 3.2,
-            "fed_rate": 5.25
-        },
-        "sec_filings": [
-            {
-                "filing_type": "10-K",
-                "date": "2025-01-30",
-                "url": "https://...",
-                "raw_text": "..."
-            }
-        ],
-        "senate_trading": [
-            {
-                "senator": "John Doe",
-                "transaction": "Purchase",
-                "amount_range": "$50,001 - $100,000",
-                "date": "2025-09-15"
-            }
-        ]
-    },
-    
-    # Error tracking
-    "errors": [
-        {
-            "source": "NewsAPI",
-            "error": "Rate limit exceeded",
-            "timestamp": "2025-10-03T12:00:05Z"
-        }
     ],
     
     "status": "partial_success"  # or "success" or "failed"
@@ -287,33 +202,10 @@ sequenceDiagram
 
 ---
 
-## API Requirements
-
-### Environment Variables Needed:
-
-```bash
-# NLP-6: News APIs
-NEWS_API_KEY=your_newsapi_key
-
-# NLP-8: Additional Data APIs
-FRED_API_KEY=your_fred_api_key          # For macro indicators
-SEC_EDGAR_USER_AGENT=your_user_agent    # For SEC filings
-SENATE_TRADING_API_KEY=your_key         # If using paid service
-
-# NLP-7: Memory (if external)
-MEMORY_DB_URL=your_db_connection_string
-```
-
----
-
 ## API Links
 
-- **NLP-5**: Yahoo Finance API - https://pypi.org/project/yfinance/
-- **NLP-6**: NewsAPI - https://newsapi.org/docs
-- **NLP-8**: FRED API (Macro) - https://fred.stlouisfed.org/docs/api/
-- **NLP-8**: SEC Edgar - https://www.sec.gov/edgar/sec-api-documentation
-- **NLP-8**: Senate Trading - https://senatestockwatcher.com/ or similar
-
+- **NLP-1**: Yahoo Finance API - https://pypi.org/project/yfinance/
+- **NLP-2**: NewsAPI - https://newsapi.org/docs
 ---
 
 
