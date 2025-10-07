@@ -2,7 +2,9 @@
 
 ## Overview
 
-The **Ingestion Module** is responsible for fetching raw data from multiple external sources in parallel. It acts as the first stage in the data pipeline, collecting unprocessed data that will later be cleaned, normalized, and analyzed by the Aggregator and Processing modules.
+The **Ingestion Module** is responsible for fetching structured data from financial and news sources in parallel. It acts as the first stage in the data pipeline, collecting data that will be analyzed by the Processing modules downstream.
+
+**Note**: This is a simplified architecture. The ingestion module fetches data from APIs that already return structured/normalized data, so no separate aggregation layer is needed.
 
 ## Core Principle
 
@@ -89,8 +91,8 @@ graph TB
     J --> L
     K --> L
     
-    L --> M[Return Complete<br/>Raw Data Bundle]
-    M --> N[Aggregator]
+    L --> M[Return Complete<br/>Data Bundle]
+    M --> N[Processing Module<br/>Sentiment/Classification]
     
     style B fill:#4CAF50,color:#fff
     style C fill:#2196F3,color:#fff
@@ -154,29 +156,23 @@ sequenceDiagram
     participant I as Ingestion
     participant FD as FinancialDataIngestion
     participant ND as NewsDataIngestion
-    participant MD as MemoryDataIngestion
-    participant AD as AdditionalDataIngestion
-    participant A as Aggregator
+    participant P as Processing Module
     
-    O->>I: execute(symbol="AAPL", period="10d")
+    O->>I: execute(symbol="AAPL", period="1mo", news_limit=10)
     
     par Parallel Fetching
-        I->>FD: fetch_financial_data("AAPL", "10d")
+        I->>FD: fetch_financial_data("AAPL", "1mo")
         I->>ND: fetch_news_data("AAPL", limit=10)
-        I->>MD: fetch_memory_data("AAPL")
-        I->>AD: fetch_additional_data("AAPL")
     end
     
-    FD-->>I: Raw OHLCV + Company Info
-    ND-->>I: Raw Articles List
-    MD-->>I: Past Notes
-    AD-->>I: Macro/Filings/Senate Data
+    FD-->>I: Structured Financial Data
+    ND-->>I: Articles List
     
     I->>I: Combine into Bundle
-    I-->>O: Complete Raw Data Bundle
+    I-->>O: Complete Data Bundle
     
-    O->>A: execute(raw_data_bundle)
-    A-->>O: Processed & Normalized Data
+    O->>P: execute(data_bundle)
+    P-->>O: Processed Data with Sentiment
 ```
 
 ---
@@ -274,19 +270,20 @@ sequenceDiagram
 
 ---
 
-## Separation from Aggregator
+## Simplified Architecture
 
 ### What Ingestion Does:
-1. ✅ Fetch raw data from APIs
+1. ✅ Fetch structured data from APIs (yfinance, NewsAPI, Yahoo RSS)
 2. ✅ Handle authentication and rate limits
 3. ✅ Basic error handling and retries
-4. ✅ Return raw/unprocessed data
+4. ✅ Calculate simple metrics (volatility, price changes)
+5. ✅ Return structured data ready for processing
 
-### What Aggregator Does (NOT Ingestion):
-1. ❌ Calculate derived metrics (volatility, ratios)
-2. ❌ Normalize data formats across sources
-3. ❌ Filter and deduplicate data
-4. ❌ Aggregate and summarize
+### What Processing Does (downstream):
+1. ✅ Sentiment analysis on news articles
+2. ✅ Entity extraction from text
+3. ✅ Text classification
+4. ✅ NLP preprocessing
 
 ---
 
