@@ -1,3 +1,14 @@
 feedparser
-yfinance
 bs4
+transformers
+torch
+pandas
+numpy
+huggingface_hub
+pydantic>=2.5
+yfinance==0.2.66
+langchain==0.3.27
+langchain-community==0.3.30
+langgraph==0.6.7
+ipython==9.5.0
+yfinance==0.2.66
