@@ -18,6 +18,7 @@ from IPython.display import Image, display
 import os
 from datetime import datetime
 from dotenv import load_dotenv
+from src.worker.base_worker import BaseWorker
 
 # Load environment variables from .env file
 load_dotenv()
@@ -63,7 +64,7 @@ class Feedback(BaseModel):
 
 
 # --- Evaluator-Optimizer Class ---
-class EvaluatorOptimizer:
+class EvaluatorOptimizer(BaseWorker):
     """
     Implements the Evaluator-Optimizer workflow pattern for investment research summaries.
     
