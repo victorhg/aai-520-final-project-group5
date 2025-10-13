@@ -9,6 +9,8 @@ from datetime import datetime
 import feedparser
 import requests
 import os
+import re
+import html
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -32,6 +34,8 @@ class NewsDataIngestion(BaseWorker):
     def __init__(self):
         super().__init__()
     
+
+
     def execute(self, *inputs) -> Dict[str, Any]:
         """
         Fetch news articles for a given stock symbol.
@@ -101,6 +105,29 @@ class NewsDataIngestion(BaseWorker):
                 "timestamp": datetime.now().isoformat()
             }
     
+    def _preprocess_text(self, text: str) -> str:
+        # Remove <script>...</script> blocks (case-insensitive, dot matches newline)
+        text = re.sub(r'(?is)<script.*?>.*?</script>', ' ', text)
+
+        # Remove any remaining HTML tags
+        text = re.sub(r'<[^>]+>', ' ', text)
+
+        # Remove javascript: URIs and inline event handlers like onload=, onclick= etc.
+        text = re.sub(r'(?i)javascript\s*:', '', text)
+        text = re.sub(r'(?i)on\w+\s*=\s*["\'].*?["\']', ' ', text)
+
+        # Remove control characters
+        text = re.sub(r'[\x00-\x1f\x7f]', ' ', text)
+
+        # Unescape HTML entities then escape to ensure safe plain text
+        text = html.unescape(text)
+        text = html.escape(text)
+
+        # Collapse multiple whitespace to single space and trim
+        text = re.sub(r'\s+', ' ', text).strip()
+
+        return text
+    
     def _fetch_from_newsapi(self, symbol: str, limit: int) -> List[Dict[str, Any]]:
         """
         Fetch articles from NewsAPI.
@@ -127,11 +154,12 @@ class NewsDataIngestion(BaseWorker):
             data = response.json()
             articles = []
             for article in data.get("articles", []):
+                processed_summary = self._preprocess_text(article.get("description", ""))   
                 articles.append({
                     "title": article.get("title", ""),
                     "link": article.get("url", ""),
                     "published": article.get("publishedAt", ""),
-                    "summary": article.get("description", ""),
+                    "summary": processed_summary,
                     "source": article.get("source", {}).get("name", "NewsAPI")
                 })
             return articles
@@ -154,11 +182,12 @@ class NewsDataIngestion(BaseWorker):
         
         articles = []
         for entry in feed.entries[:limit]:
+            processed_summary = self._preprocess_text(entry.get("summary", ""))
             articles.append({
                 "title": entry.get("title", ""),
                 "link": entry.get("link", ""),
                 "published": entry.get("published", ""),
-                "summary": entry.get("summary", ""),
+                "summary": processed_summary,
                 "source": "Yahoo Finance"
             })
         

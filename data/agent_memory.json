@@ -118,5 +118,29 @@
       "TSLA",
       "production"
     ]
+  },
+  {
+    "timestamp": "2025-10-13T02:03:30.171504",
+    "text": "AAPL Q2 earnings beat expectations",
+    "tags": [
+      "AAPL",
+      "earnings"
+    ]
+  },
+  {
+    "timestamp": "2025-10-13T02:03:30.172038",
+    "text": "AAPL announced a new AI partnership with NASA",
+    "tags": [
+      "AAPL",
+      "AI"
+    ]
+  },
+  {
+    "timestamp": "2025-10-13T02:03:30.172231",
+    "text": "TSLA stock is volatile due to production concerns",
+    "tags": [
+      "TSLA",
+      "production"
+    ]
   }
 ]
