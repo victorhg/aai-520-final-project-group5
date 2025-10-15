@@ -6,7 +6,7 @@ Shiley-Marcos School of Engineering, University of San Diego AAI-510: Machine Le
 
 - Antonio Recalde
 - Ajmal Jalal
-- Darin Verduzzo
+- Darin Verduzco
 - Michael De Leon
 - Victor H. Germano
 
