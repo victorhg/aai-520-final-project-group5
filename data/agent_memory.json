@@ -142,5 +142,142 @@
       "TSLA",
       "production"
     ]
+  },
+  {
+    "timestamp": "2025-10-15T11:40:45.788616",
+    "text": "[AAPL] 7d summary (conf=0.50)",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T11:40:45.788616",
+    "text": "[AAPL] Routes: earnings, macro, company",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T11:54:48.414849+00:00",
+    "text": "[AAPL] 7d summary (conf=0.50)",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T11:54:48.414849+00:00",
+    "text": "[AAPL] Routes: earnings, company",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T11:55:44.046380+00:00",
+    "text": "[AAPL] 7d summary (conf=0.50)",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T11:55:44.046380+00:00",
+    "text": "[AAPL] Routes: earnings, company",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T12:24:07.800302+00:00",
+    "text": "[AAPL] 7d summary (conf=0.50)",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T12:24:07.801304+00:00",
+    "text": "[AAPL] Routes: earnings, company",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T12:45:07.503101+00:00",
+    "text": "[AAPL] 7d summary (conf=0.50)",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T12:45:07.505103+00:00",
+    "text": "[AAPL] Routes: earnings, company",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T12:50:17.107239+00:00",
+    "text": "[AAPL] 7d summary (conf=0.50)",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T12:50:17.107239+00:00",
+    "text": "[AAPL] Routes: earnings, company",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T12:55:12.365482+00:00",
+    "text": "[AAPL] 7d summary (conf=0.50)",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T12:55:12.365482+00:00",
+    "text": "[AAPL] Routes: earnings, company",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T13:08:02.942113+00:00",
+    "text": "[AAPL] 7d summary (conf=0.50)",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T13:08:02.943114+00:00",
+    "text": "[AAPL] Routes: earnings, macro, company",
+    "tags": [
+      "AAPL",
+      "summary"
+    ]
+  },
+  {
+    "timestamp": "2025-10-15T13:08:23.944511+00:00",
+    "text": "[AAPL] Final Optimized Summary",
+    "tags": [
+      "AAPL",
+      "summary",
+      "# Investment Research Summary: Apple Inc. (AAPL)\n\n## 1. Company Overview\nApple Inc. (AAPL) is a leading technology company known for designing, manufacturing, and marketing consumer electronics, software, and online services. Its product portfolio includes the iPhone, Mac computers, iPad tablets, and a variety of wearables and accessories. The company operates in a highly competitive market, continually innovating to maintain its leadership position.\n\n## 2. Recent Financial Metrics\n- **Current Price**: $247.77\n- **Price Change**: $0.11 (0.04%)\n- **Volume**: 35,447,900 shares traded\n- **Market Cap**: $3.68 trillion\n- **P/E Ratio**: 29.82\n- **Dividend Yield**: 0.42%\n- **52-Week Range**: $169.21 - $260.10\n- **Beta**: 1.094 (indicating slightly higher volatility than the market)\n- **Sector**: Technology\n- **Industry**: Consumer Electronics\n- **30-Day Volatility**: 25.07%\n\n## 3. Recent Price Trend (Last 5 Days)\n| Day       | Close Price | Volume        |\n|-----------|-------------|---------------|\n| Day 1    | $258.06     | 36,496,900    |\n| Day 2    | $254.04     | 38,322,000    |\n| Day 3    | $245.27     | 61,999,100    |\n| Day 4    | $247.66     | 38,142,900    |\n| Day 5    | $247.77     | 35,447,900    |\n\n### Summary of Recent Price Movement\n- The stock experienced volatility over the last five trading days, with a peak closing price of $258.06 on Day 1 and a low of $245.27 on Day 3.\n- On average, the stock has shown resilience, recovering some losses to close at $247.77 on Day 5.\n\n## 4. News Analysis\nRecent news articles have highlighted several key developments impacting Apple:\n1. **Demand Surge**: Apple has seen a surge in demand for its iPhone 17 in China, which may positively influence sales and revenue.\n2. **Investment in China**: CEO Tim Cook has indicated plans to bolster investments in China, signaling confidence in one of its largest markets.\n3. **Tax Law Lobbying in India**: Apple is reportedly lobbying the Indian government to modify tax laws, which could enhance its operational efficiency in the country.\n\nThese developments suggest a favorable sentiment towards Apple\u2019s growth prospects, particularly in international markets.\n\n## 5. Risk Factors\n- **Market Volatility**: AAPL has a beta of 1.094, indicating that it is slightly more volatile than the overall market. Investors should be prepared for price fluctuations.\n- **Global Economic Conditions**: Apple\u2019s performance is closely tied to global economic conditions and consumer spending trends.\n- **Regulatory Risks**: Ongoing lobbying efforts in India and potential regulatory changes in China could pose challenges.\n\n## 6. Investment Recommendation\n**Recommendation**: **Hold**\n\n### Rationale\n- **Positive Catalysts**: The strong demand for the iPhone 17 in China and potential regulatory changes in India could drive growth in revenue and market share.\n- **Volatility Awareness**: While the stock has shown short-term volatility, the fundamentals remain strong with a healthy P/E ratio and consistent demand for its products.\n- **Market Position**: Apple maintains a leading position in the technology sector, and any long-term investor may benefit from holding onto the stock, particularly given its history of innovation and brand loyalty.\n\n### Conclusion\nGiven the current market conditions, recent price trends, and ongoing developments in Apple\u2019s business strategy, a hold position is prudent. Investors should continue to monitor market conditions and company announcements, particularly regarding sales performance and global economic indicators, which could necessitate a reassessment of this recommendation."
+    ]
   }
 ]
