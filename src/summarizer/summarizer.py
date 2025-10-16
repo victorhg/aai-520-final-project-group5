@@ -37,8 +37,8 @@ class SummarizerWorker(BaseWorker):
 
     def execute(self, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Fix: ensure news_daily is present by deriving it from raw_news when missing.
-        This prevents confidence from defaulting to 0.50 when inputs omit news_daily.
+        Ensures `news_daily` exists by deriving it from `raw_news` when missing.
+        Uses robust counting so empty titles don't suppress daily counts.
         """
         import pandas as pd
 
@@ -48,7 +48,7 @@ class SummarizerWorker(BaseWorker):
         window     = int(inputs.get("window", 7))
         goal       = inputs.get("analysis_goal", f"Next-week price drivers for {symbol}")
 
-        # ---- FIX: build news_daily from raw_news if not provided ----
+        # ---- Build news_daily from raw_news if not provided ----
         if news_daily is None and raw_news is not None:
             try:
                 df = raw_news if isinstance(raw_news, pd.DataFrame) else pd.DataFrame(raw_news)
@@ -63,10 +63,12 @@ class SummarizerWorker(BaseWorker):
                     # If no time column exists, assume "today" to avoid NaT issues
                     df["date"] = pd.Timestamp.today().date()
 
-                # Derive simple daily aggregates; sentiment fields are placeholders (0.0)
+                # Robust daily aggregation: count all rows per day (even if title is NaN)
                 news_daily = (
                     df.groupby("date")
-                      .agg(news_count=("title", "count"))
+                      .size()
+                      .rename("news_count")
+                      .to_frame()
                       .reset_index()
                       .assign(sent_mean=0.0, sent_decay=0.0)
                       .set_index("date")
@@ -74,7 +76,7 @@ class SummarizerWorker(BaseWorker):
             except Exception as e:
                 print(f"[WARN] Could not derive news_daily: {e}")
                 news_daily = None
-        # ---- end FIX ----
+        # ---- end build ----
 
         context = self._format_context(news_daily, raw_news, window)
         routed  = self._route_headlines(raw_news)
