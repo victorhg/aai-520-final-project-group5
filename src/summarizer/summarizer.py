@@ -41,7 +41,25 @@ Avoid hype; be specific. Include dates or sources inline when present.
 
 class SummarizerWorker(BaseWorker):
     def __init__(self, name: str = "summarizer", role: str = "news_summary", model: str | None = None):
-        super().__init__(name=name, role=role, model=model)
+        """
+        Defensive init:
+        - Tries super().__init__(name=..., role=..., model=...).
+        - If parent __init__ takes no args or is missing, call it without args (if present)
+          and set attributes locally as a fallback.
+        """
+        # Try the most specific signature first
+        try:
+            super().__init__(name=name, role=role, model=model)  # type: ignore[misc]
+        except TypeError:
+            # Parent __init__ takes no args (or doesn't define one)
+            try:
+                super().__init__()  # type: ignore[misc]
+            except Exception:
+                pass
+            # Fallback: ensure attributes exist on self
+            setattr(self, "name", name)
+            setattr(self, "role", role)
+            setattr(self, "model", model)
 
     def execute(self, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
