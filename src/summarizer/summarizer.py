@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import Dict, Any, List, Union
 
 # pick the right one (leave ONE uncommented):
-from ..base_worker import BaseWorker              # if src/base_worker.py exists
-# from ..worker.base_worker import BaseWorker     # if src/worker/base_worker.py exists
-# from base_worker import BaseWorker              # if base_worker.py is at repo root (no src/)
+# from ..base_worker import BaseWorker            
+from ..worker.base_worker import BaseWorker        
+# from base_worker import BaseWorker                
 
 ROUTES = {
     "earnings": ["eps", "guidance", "revenue", "call", "forecast", "beat", "miss", "margin"],
