@@ -36,16 +36,51 @@ class SummarizerWorker(BaseWorker):
         super().__init__(name=name, role=role, model=model)
 
     def execute(self, inputs: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Fix: ensure news_daily is present by deriving it from raw_news when missing.
+        This prevents confidence from defaulting to 0.50 when inputs omit news_daily.
+        """
+        import pandas as pd
+
         symbol: str = inputs["symbol"]
         news_daily = inputs.get("news_daily")
         raw_news   = inputs.get("raw_news")
         window     = int(inputs.get("window", 7))
         goal       = inputs.get("analysis_goal", f"Next-week price drivers for {symbol}")
 
+        # ---- FIX: build news_daily from raw_news if not provided ----
+        if news_daily is None and raw_news is not None:
+            try:
+                df = raw_news if isinstance(raw_news, pd.DataFrame) else pd.DataFrame(raw_news)
+
+                # Normalize a date column
+                if "published" in df.columns:
+                    df["published"] = pd.to_datetime(df["published"], errors="coerce")
+                    df["date"] = df["published"].dt.date
+                elif "date" in df.columns:
+                    df["date"] = pd.to_datetime(df["date"], errors="coerce").dt.date
+                else:
+                    # If no time column exists, assume "today" to avoid NaT issues
+                    df["date"] = pd.Timestamp.today().date()
+
+                # Derive simple daily aggregates; sentiment fields are placeholders (0.0)
+                news_daily = (
+                    df.groupby("date")
+                      .agg(news_count=("title", "count"))
+                      .reset_index()
+                      .assign(sent_mean=0.0, sent_decay=0.0)
+                      .set_index("date")
+                )
+            except Exception as e:
+                print(f"[WARN] Could not derive news_daily: {e}")
+                news_daily = None
+        # ---- end FIX ----
+
         context = self._format_context(news_daily, raw_news, window)
         routed  = self._route_headlines(raw_news)
         prompt  = PROMPT_TEMPLATE.format(goal=goal, symbol=symbol, context=context)
 
+        # Replace this stub with your LLM call when ready
         summary_text = (
             "(Stubbed summary — replace with your LLM call)\n"
             + prompt
@@ -77,7 +112,7 @@ class SummarizerWorker(BaseWorker):
             parts.append("Daily sentiment (most recent first):")
             for idx, row in tail.iloc[::-1].iterrows():
                 parts.append(
-                    f"- {idx.date()}: count={int(row.get('news_count', 0))}, "
+                    f"- {idx}: count={int(row.get('news_count', 0))}, "
                     f"sent_mean={row.get('sent_mean', 0):+.3f}, decay={row.get('sent_decay', 0):+.3f}"
                 )
         if raw_news is not None:
@@ -112,6 +147,10 @@ class SummarizerWorker(BaseWorker):
         return {k: v[:5] for k, v in routed.items()}
 
     def _confidence_from_news(self, news_daily, window: int) -> float:
+        """
+        Confidence rises modestly with average daily news volume.
+        If news_daily is missing or malformed, fall back to 0.50.
+        """
         if news_daily is None or not hasattr(news_daily, "tail") or len(news_daily) == 0:
             return 0.50
         try:
