@@ -14,7 +14,7 @@ def test_execute_returns_expected_keys_without_confidence():
     w = SummarizerWorker()
     out = w.execute({"symbol": "TEST", "raw_news": _toy_news(8), "window": 7})
     # Required keys for the new contract
-    assert set(["symbol","summary","routed_notes","artifacts","memory_writes"]).issubset(out.keys())
+    assert set(["symbol", "summary", "routed_notes", "artifacts", "memory_writes"]).issubset(out.keys())
     # Explicitly ensure confidence is gone
     assert "confidence" not in out
 
@@ -22,5 +22,6 @@ def test_routing_has_known_buckets():
     w = SummarizerWorker()
     out = w.execute({"symbol": "TEST", "raw_news": _toy_news(8)})
     buckets = out["routed_notes"]
+    # New expected routing buckets
     assert set(buckets.keys()) == {"earnings", "macro", "company"}
     assert all(isinstance(v, list) for v in buckets.values())
