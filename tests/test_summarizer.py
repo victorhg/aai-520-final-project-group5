@@ -1,26 +1,26 @@
-# tests/test_summarizer.py
-# Verifies confidence > 0.50 when raw_news is present (i.e., news_daily is derived),
-# and == 0.50 when there's no news.
-
-from datetime import datetime, timedelta
+﻿from datetime import datetime, timedelta
 import pandas as pd
-
 from src.summarizer.summarizer import SummarizerWorker
 
 def _toy_news(rows=8):
     now = datetime.now()
     return pd.DataFrame({
-        "title": [f"T{i}" for i in range(rows-1)] + [None],  # include a None to test robust counting
+        "title": [f"T{i}" for i in range(rows)],
         "source": ["demo"] * rows,
         "published": [now - timedelta(days=i // 2) for i in range(rows)]
     })
 
-def test_confidence_builds_from_raw_news():
+def test_execute_returns_expected_keys_without_confidence():
     w = SummarizerWorker()
     out = w.execute({"symbol": "TEST", "raw_news": _toy_news(8), "window": 7})
-    assert out["confidence"] > 0.50
+    # Required keys for the new contract
+    assert set(["symbol","summary","routed_notes","artifacts","memory_writes"]).issubset(out.keys())
+    # Explicitly ensure confidence is gone
+    assert "confidence" not in out
 
-def test_confidence_falls_back_when_no_news():
+def test_routing_has_known_buckets():
     w = SummarizerWorker()
-    out = w.execute({"symbol": "TEST", "raw_news": None, "window": 7})
-    assert out["confidence"] == 0.50
+    out = w.execute({"symbol": "TEST", "raw_news": _toy_news(8)})
+    buckets = out["routed_notes"]
+    assert set(buckets.keys()) == {"earnings", "macro", "company"}
+    assert all(isinstance(v, list) for v in buckets.values())
