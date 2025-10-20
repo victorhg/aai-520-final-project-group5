@@ -1,4 +1,4 @@
-"""
+﻿"""
 Evaluator-Optimizer Module
 
 Implements the Evaluator-Optimizer workflow pattern where:
@@ -574,13 +574,13 @@ Be fair but thorough. A passing grade means the summary is publication-ready and
         max_iterations = state["max_iterations"]
         
         if grade == "pass":
-            print(f"\n✅ Quality PASSED - Ending optimization")
+            print(f"\nâœ… Quality PASSED - Ending optimization")
             return "end"
         elif iteration >= max_iterations:
-            print(f"\n⚠️  Max iterations ({max_iterations}) reached - Ending optimization")
+            print(f"\nâš ï¸  Max iterations ({max_iterations}) reached - Ending optimization")
             return "end"
         else:
-            print(f"\n🔄 Quality FAILED - Continuing to iteration {iteration + 1}")
+            print(f"\nðŸ”„ Quality FAILED - Continuing to iteration {iteration + 1}")
             return "continue"
     
     def _format_context(self, context: Dict[str, Any]) -> str:
@@ -718,7 +718,7 @@ Be fair but thorough. A passing grade means the summary is publication-ready and
         print(f"Total Iterations: {results['iterations']}")
         print(f"Final Grade: {results['final_grade'].upper()}")
         print(f"Final Quality Score: {results['quality_score']}/10")
-        print(f"Quality Passed: {'✅ YES' if results['passed'] else '❌ NO'}")
+        print(f"Quality Passed: {'âœ… YES' if results['passed'] else 'âŒ NO'}")
         print(f"{'#'*60}\n")
         
         return results
@@ -776,7 +776,6 @@ def create_mock_context(symbol: str) -> Dict[str, Any]:
         "sentiment": {
             "overall": "positive",
             "score": 0.65,
-            "confidence": 0.82
         },
         "analysis_date": datetime.now().isoformat()
     }
@@ -793,7 +792,7 @@ if __name__ == "__main__":
     try:
         evaluator_optimizer = EvaluatorOptimizer(max_iterations=3)
     except ValueError as e:
-        print(f"❌ Error: {e}")
+        print(f"âŒ Error: {e}")
         exit(1)
     
     # Get context data
@@ -804,11 +803,11 @@ if __name__ == "__main__":
     
     ingestion_worker = Ingestion()
     context = ingestion_worker.execute(symbol)
-    print(f"✅ Real data retrieved:")
+    print(f"âœ… Real data retrieved:")
     print(f"   - Symbol: {context.get('symbol', 'N/A')}")
     print(f"   - Status: {context.get('status', 'N/A')}")
-    print(f"   - Financial Data: {'✓' if 'financial_data' in context else '✗'}")
-    print(f"   - News Data: {'✓' if 'news_data' in context else '✗'}")
+    print(f"   - Financial Data: {'âœ“' if 'financial_data' in context else 'âœ—'}")
+    print(f"   - News Data: {'âœ“' if 'news_data' in context else 'âœ—'}")
     
     # Test with user instructions
     instructions = "Analyze the potential for AAPL stock over the past month and provide a buy/sell/hold recommendation with detailed rationale."
@@ -823,25 +822,25 @@ if __name__ == "__main__":
     print("\n" + "="*60)
     print("FINAL RESULTS")
     print("="*60)
-    print(f"\n📊 INVESTMENT RESEARCH SUMMARY:")
+    print(f"\nðŸ“Š INVESTMENT RESEARCH SUMMARY:")
     print("-" * 60)
     print(results['final_summary'])
     print("-" * 60)
     
-    print(f"\n📈 METRICS:")
+    print(f"\nðŸ“ˆ METRICS:")
     print(f"  - Iterations: {results['iterations']}")
     print(f"  - Quality Score: {results['quality_score']}/10")
-    print(f"  - Quality Check: {'✅ PASSED' if results['passed'] else '❌ FAILED'}")
+    print(f"  - Quality Check: {'âœ… PASSED' if results['passed'] else 'âŒ FAILED'}")
     print(f"  - Final Grade: {results['final_grade'].upper()}")
     
     if results['issues']:
-        print(f"\n⚠️  REMAINING ISSUES:")
+        print(f"\nâš ï¸  REMAINING ISSUES:")
         for i, issue in enumerate(results['issues'], 1):
             print(f"  {i}. {issue}")
     
-    print(f"\n📝 ITERATION HISTORY:")
+    print(f"\nðŸ“ ITERATION HISTORY:")
     for record in results['history']:
-        status = "✅" if record['grade'] == 'pass' else "❌"
+        status = "âœ…" if record['grade'] == 'pass' else "âŒ"
         print(f"  {status} Iteration {record['iteration']}: "
               f"Score={record['quality_score']:.1f}/10, "
               f"Length={record['summary_length']} chars, "
@@ -852,4 +851,4 @@ if __name__ == "__main__":
     print("Generating workflow visualization...")
     evaluator_optimizer.visualize()
     
-    print("\n✅ Test complete!")
+    print("\nâœ… Test complete!")
